@@ -27,6 +27,64 @@ A web application where authenticated users can create, view, edit, delete, and 
 | Email | Resend |
 | SMS | Twilio |
 
+## How to Use
+
+### 1. Create an account
+Go to `/authenticate`, sign up with email + password or continue with Google. You'll land on your dashboard.
+
+### 2. Create a note
+Click **New note** on the dashboard. You're taken to the editor — start typing. The note auto-saves every 800ms after your last keystroke. You'll see a **Saving… → Saved ✓** indicator at the top.
+
+### 3. Format your note
+Use the toolbar above the editor:
+- **B** / *I* — bold / italic
+- **H1 H2 H3** — headings
+- **¶** — paragraph (reset heading)
+- **•** — bullet list
+- **`code`** — inline code
+- **```** — code block
+- **—** — horizontal rule
+
+### 4. Share a note publicly
+Open a note → scroll to the **Share** panel → toggle **Make public**. A unique URL is generated (`/p/[slug]`). Copy and share it with anyone — no login needed to read it.
+
+### 5. Send via email or SMS
+With the note set to public, use the **Email** or **SMS** tab in the Share panel to send the link directly to a recipient. Rate limited to 10 sends per hour.
+
+### 6. Discover public notes
+On the dashboard, scroll below **My Notes** to see the **Discover Public Notes** section — all notes shared publicly by other users, with their author name and timestamp.
+
+### 7. Switch theme
+Click the **sun** (dark mode) or **moon** (light mode) icon in the top-right header to toggle. Preference is saved in `localStorage`.
+
+---
+
+## URL Reference
+
+| URL | Access | What it does |
+|---|---|---|
+| `/` | Public | Landing page |
+| `/authenticate` | Public | Sign in or sign up (email/password + Google + GitHub) |
+| `/dashboard` | Auth required | Your notes list + Discover public notes from other users |
+| `/notes/[id]` | Auth required | Note editor — write, format, auto-save, share, delete |
+| `/p/[slug]` | Public | Read-only view of a publicly shared note |
+
+### API endpoints
+
+| Method | URL | What it does |
+|---|---|---|
+| `GET` | `/api/notes` | List all notes for the logged-in user |
+| `POST` | `/api/notes` | Create a new note |
+| `GET` | `/api/notes/[id]` | Get a single note (owner only) |
+| `PUT` | `/api/notes/[id]` | Update title or content |
+| `DELETE` | `/api/notes/[id]` | Delete a note |
+| `POST` | `/api/notes/[id]/share` | Toggle public sharing on/off |
+| `POST` | `/api/notes/[id]/send-share` | Send the public link via email or SMS |
+| `GET` | `/api/public-notes/[slug]` | Get a public note by slug (no auth) |
+| `GET/POST` | `/api/auth/[...all]` | better-auth handler (login, signup, OAuth, logout) |
+
+---
+
 ## Getting Started
 
 ### 1. Install dependencies
