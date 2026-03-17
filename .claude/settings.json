@@ -1,0 +1,223 @@
+{
+  "model": "opusplan",
+
+  "env": {
+    "ANTHROPIC_DEFAULT_OPUS_MODEL":   "claude-opus-4-6",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "claude-sonnet-4-6",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL":  "claude-haiku-4-5-20251001",
+
+    "DISABLE_NON_ESSENTIAL_MODEL_CALLS": "1",
+
+    "DISABLE_TELEMETRY":                   "1",
+    "DISABLE_ERROR_REPORTING":             "1",
+    "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
+
+    "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "16384",
+    "BASH_DEFAULT_TIMEOUT_MS":       "120000",
+    "MCP_TIMEOUT":                   "30000",
+    "MCP_TOOL_TIMEOUT":              "60000",
+
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "85",
+
+    "DATABASE_PATH":       "data/app.db",
+    "NEXT_PUBLIC_APP_URL": "http://localhost:3000"
+  },
+
+  "alwaysThinkingEnabled": true,
+
+  "showTurnDuration":           true,
+  "spinnerTipsEnabled":         false,
+  "terminalProgressBarEnabled": true,
+  "respectGitignore":           true,
+  "cleanupPeriodDays":          30,
+  "autoUpdatesChannel":         "stable",
+
+  "permissions": {
+    "defaultMode": "acceptEdits",
+
+    "allow": [
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git add *)",
+      "Bash(git stash *)",
+      "Bash(git branch *)",
+      "Bash(git checkout *)",
+      "Bash(git fetch *)",
+
+      "Bash(bun install)",
+      "Bash(bun add *)",
+      "Bash(bun remove *)",
+      "Bash(bun run *)",
+      "Bash(bun test *)",
+      "Bash(bun build *)",
+      "Bash(bun x *)",
+
+      "Bash(npm install)",
+      "Bash(npm run *)",
+      "Bash(npm test *)",
+      "Bash(pnpm install)",
+      "Bash(pnpm run *)",
+      "Bash(yarn install)",
+      "Bash(yarn run *)",
+
+      "Bash(node *)",
+      "Bash(npx *)",
+
+      "Bash(python *)",
+      "Bash(python3 *)",
+      "Bash(pip install *)",
+
+      "Bash(next build)",
+      "Bash(next lint)",
+      "Bash(tsc *)",
+
+      "Bash(sqlite3 * .schema)",
+      "Bash(sqlite3 * .tables)",
+      "Bash(sqlite3 * .dump)",
+
+      "Bash(docker build *)",
+      "Bash(docker compose *)",
+      "Bash(docker ps *)",
+      "Bash(docker logs *)",
+
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(find *)",
+      "Bash(grep *)",
+      "Bash(mkdir *)",
+      "Bash(cp *)",
+      "Bash(mv *)",
+      "Bash(touch *)",
+      "Bash(chmod *)",
+      "Bash(echo *)",
+      "Bash(which *)",
+      "Bash(jq *)",
+
+      "Read(**/*.ts)",
+      "Read(**/*.tsx)",
+      "Read(**/*.js)",
+      "Read(**/*.jsx)",
+      "Read(**/*.json)",
+      "Read(**/*.md)",
+      "Read(**/*.sql)",
+      "Read(**/*.css)",
+      "Read(**/*.html)",
+      "Read(**/*.env.example)",
+      "Read(CLAUDE.md)",
+      "Read(.claude/*)",
+
+      "Edit(**/*.ts)",
+      "Edit(**/*.tsx)",
+      "Edit(**/*.js)",
+      "Edit(**/*.jsx)",
+      "Edit(**/*.json)",
+      "Edit(**/*.md)",
+      "Edit(**/*.sql)",
+      "Edit(**/*.css)"
+    ],
+
+    "ask": [
+      "Bash(git commit *)",
+      "Bash(git merge *)",
+      "Bash(git rebase *)",
+      "Bash(git reset *)",
+      "Bash(git cherry-pick *)",
+      "Bash(docker rm *)",
+      "Bash(docker rmi *)",
+      "Bash(rm *)",
+      "Bash(sqlite3 * INSERT*)",
+      "Bash(sqlite3 * UPDATE*)",
+      "Bash(sqlite3 * DELETE*)",
+      "Bash(sqlite3 * DROP*)"
+    ],
+
+    "deny": [
+  
+      "Read(**/secrets/**)",
+      "Read(**/credentials/**)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Read(~/.config/gh/**)",
+
+      
+      "Edit(data/app.db)",
+      "Edit(../)",
+      "Edit(/etc/**)",
+      "Edit(~/**)",
+
+      "Bash(rm -rf /)",
+      "Bash(rm -rf ~)",
+      "Bash(sudo rm *)",
+      "Bash(sudo chmod *)",
+      "Bash(shutdown *)",
+      "Bash(reboot *)",
+      "Bash(halt *)",
+      "Bash(pkill *)",
+      "Bash(killall *)",
+      "Bash(dd *)",
+      "Bash(mkfs *)",
+      "Bash(fdisk *)",
+
+      "Bash(git push origin main)",
+      "Bash(git push origin master)",
+      "Bash(git push --force *)",
+      "Bash(git push -f *)",
+
+      "Bash(sudo *)",
+      "Bash(su *)",
+      "Bash(curl *)",
+      "Bash(wget *)"
+    ],
+
+    "additionalDirectories": []
+  },
+
+  "sandbox": {
+    "enabled": false,
+    "autoAllowBashIfSandboxed": false,
+    "excludedCommands": ["git", "bun", "npm", "pnpm", "yarn"],
+    "allowUnsandboxedCommands": false,
+    "network": {
+      "allowedDomains": [
+        "api.anthropic.com",
+        "registry.npmjs.org",
+        "*.bun.sh",
+        "github.com",
+        "raw.githubusercontent.com",
+        "api.resend.com",
+        "api.twilio.com"
+      ],
+      "allowLocalBinding": true
+    }
+  },
+
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit(**/*.ts)",
+        "hooks": [{ "type": "command", "command": "bun run lint --fix $CLAUDE_TOOL_ARG 2>/dev/null || true" }]
+      },
+      {
+        "matcher": "Edit(**/*.tsx)",
+        "hooks": [{ "type": "command", "command": "bun run lint --fix $CLAUDE_TOOL_ARG 2>/dev/null || true" }]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [{ "type": "command", "command": "jq -r '\"[claude] $ \" + .command' 2>/dev/null || true" }]
+      }
+    ]
+  },
+
+  "attribution": {
+    "commit": "Generated with Claude Code\n\nCo-Authored-By: Claude <noreply@anthropic.com>",
+    "pr": ""
+  },
+
+  "statusLine": {
+    "type": "command",
+    "command": "branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo 'no-git'); ctx=$(echo \"$CLAUDE_CONTEXT_WINDOW_USAGE\" | jq -r '((.used/.total*100)|round|tostring) + \"% ctx\"' 2>/dev/null || echo ''); echo \"  $branch  $ctx\""
+  }
+}
