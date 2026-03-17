@@ -1,5 +1,7 @@
 # NoteShare
 
+**Live app: https://noteshare.fly.dev/**
+
 A web application where authenticated users can create, view, edit, delete, and publicly share rich-text notes. Built with Next.js App Router, Bun, TipTap, and SQLite.
 
 ## Features
